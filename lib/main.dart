@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/cubit/auth/auth_cubit.dart';
 import 'package:flutter_chat_app/data/repositories/auth_repositories.dart';
+import 'package:flutter_chat_app/data/repositories/store_repositories.dart';
+import 'package:flutter_chat_app/views/home_view.dart';
 import 'package:flutter_chat_app/views/sign_in_view.dart';
 
+import 'cubit/users/users_cubit.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -22,19 +26,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Chat App Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MultiBlocProvider(
+    return RepositoryProvider(
+      create: (context) => AuthRepository(),
+      child: MultiBlocProvider(
         providers: [
-          BlocProvider<AuthCubit>(
-              create: (_) => AuthCubit(AuthRepository()),
+          BlocProvider(
+            create: (context) =>
+                AuthCubit(AuthRepository(), StoreRepositories()),
           ),
-        ], child: const SignInView(),
+          BlocProvider(create: (context) => UserCubit(StoreRepositories())),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return const HomeView();
+              }
+
+              return const SignInView();
+            },
+          ),
+        ),
       ),
-      debugShowCheckedModeBanner: false,
     );
   }
 }

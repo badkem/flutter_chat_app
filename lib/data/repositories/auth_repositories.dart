@@ -5,6 +5,7 @@ class AuthRepository {
   static final _firebaseAuth = FirebaseAuth.instance;
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: '71735278009-jvrlf3jfda11jvpr1pmeil6pho015g3g.apps.googleusercontent.com',
     scopes: [
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
@@ -15,7 +16,7 @@ class AuthRepository {
     try {
       await _firebaseAuth.signOut();
     } catch (e) {
-      throw Exception(e);
+      throw Exception(e.toString());
     }
   }
 
