@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/cubit/auth/auth_cubit.dart';
 import 'package:flutter_chat_app/cubit/users/users_cubit.dart';
+import 'package:flutter_chat_app/data/models/peer.dart';
 
+import 'chat_view.dart';
 import 'sign_in_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -16,7 +18,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
+    final me = FirebaseAuth.instance.currentUser!;
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is Unauthenticated) {
@@ -31,10 +33,10 @@ class _HomeViewState extends State<HomeView> {
           title: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(user.photoURL!),
+                backgroundImage: NetworkImage(me.photoURL!),
               ),
               const SizedBox(width: 5),
-              Text(user.displayName!)
+              Text(me.displayName!)
             ],
           ),
           actions: [
@@ -54,15 +56,25 @@ class _HomeViewState extends State<HomeView> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        final user = snapshot.data!.docs[index];
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(user['photoUrl']),
+                        final peer = snapshot.data![index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatView(
+                                          peer: peer,
+                                        )));
+                          },
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(peer.photoUrl),
+                            ),
+                            title: Text(peer.name),
+                            subtitle: Text(peer.email),
                           ),
-                          title: Text(user['name']),
-                          subtitle: Text(user['email']),
                         );
                       },
                     );

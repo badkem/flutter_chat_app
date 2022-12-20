@@ -8,6 +8,7 @@ import 'package:flutter_chat_app/data/repositories/store_repositories.dart';
 import 'package:flutter_chat_app/views/home_view.dart';
 import 'package:flutter_chat_app/views/sign_in_view.dart';
 
+import 'cubit/chat/chat_cubit.dart';
 import 'cubit/users/users_cubit.dart';
 import 'firebase_options.dart';
 
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
                 AuthCubit(AuthRepository(), StoreRepositories()),
           ),
           BlocProvider(create: (context) => UserCubit(StoreRepositories())),
+          BlocProvider(create: (context) => ChatCubit()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

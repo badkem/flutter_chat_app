@@ -5,6 +5,10 @@ abstract class UsersState {
   const UsersState();
 }
 
+class Initial extends UsersState {
+  const Initial();
+}
+
 class Loading extends UsersState {
   const Loading();
 }
