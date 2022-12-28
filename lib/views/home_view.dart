@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/cubit/auth/auth_cubit.dart';
 import 'package:flutter_chat_app/cubit/users/users_cubit.dart';
-import 'package:flutter_chat_app/data/models/peer.dart';
+import 'package:flutter_chat_app/my_widgets/my_button.dart';
 
 import 'chat_view.dart';
 import 'sign_in_view.dart';
@@ -30,12 +30,19 @@ class _HomeViewState extends State<HomeView> {
       },
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: false,
           title: Row(
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(me.photoURL!),
-              ),
-              const SizedBox(width: 5),
+              MyButton(
+                  onPressed: () {},
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(me.photoURL!),
+                      fit: BoxFit.cover,
+                    ),
+                  )),
+              const SizedBox(width: 8),
               Text(me.displayName!)
             ],
           ),

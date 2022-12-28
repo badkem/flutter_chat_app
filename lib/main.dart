@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/cubit/auth/auth_cubit.dart';
+import 'package:flutter_chat_app/cubit/chat/video_chat_cubit.dart';
 import 'package:flutter_chat_app/data/repositories/auth_repositories.dart';
 import 'package:flutter_chat_app/data/repositories/store_repositories.dart';
 import 'package:flutter_chat_app/views/home_view.dart';
@@ -37,9 +38,18 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(create: (context) => UserCubit(StoreRepositories())),
           BlocProvider(create: (context) => ChatCubit()),
+          BlocProvider(create: (context) => VideoChatCubit()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              iconTheme: IconThemeData(color: Colors.black),
+              elevation: 0,
+            ),
+          ),
           home: StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {

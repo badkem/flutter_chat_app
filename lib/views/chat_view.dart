@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_app/cubit/chat/chat_cubit.dart';
 import 'package:flutter_chat_app/data/models/message.dart';
 import 'package:flutter_chat_app/data/models/peer.dart';
+import 'package:flutter_chat_app/views/video_chat_view.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -53,6 +54,27 @@ class _ChatViewState extends State<ChatView> {
             Text(widget.peer.name)
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const VideoChatView()));
+            },
+            icon: const Icon(
+              Icons.call,
+              size: 28,
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.videocam,
+              size: 28,
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: BlocConsumer<ChatCubit, ChatState>(
@@ -106,7 +128,8 @@ class _ChatViewState extends State<ChatView> {
                                             color: isMe
                                                 ? Colors.lightBlue
                                                 : Colors.grey.shade300,
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
                                           child: Text(
                                             message.text,
@@ -119,9 +142,14 @@ class _ChatViewState extends State<ChatView> {
                                             ),
                                           ),
                                         ),
-                                        Text(
-                                          timeago.format(message.time),
-                                          style: const TextStyle(fontSize: 10),
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              left: 10, right: 10, bottom: 5),
+                                          child: Text(
+                                            timeago.format(message.time),
+                                            style:
+                                                const TextStyle(fontSize: 10),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -168,7 +196,7 @@ class _ChatViewState extends State<ChatView> {
                             );
                           }
                         },
-                        icon: const Icon(Icons.send),
+                        icon: const Icon(Icons.send, color: Colors.blue),
                       )
                     ],
                   ),
